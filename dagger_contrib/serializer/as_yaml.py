@@ -1,7 +1,7 @@
 """Implementation of a YAML serializer (https://yaml.org/spec/)."""
 
 import io
-from typing import Any, BinaryIO
+from typing import Any, BinaryIO, Optional
 
 from dagger import DeserializationError, SerializationError
 
@@ -11,16 +11,30 @@ class AsYAML:
 
     extension = "yaml"
 
+    def __init__(
+        self,
+        indent: Optional[int] = None,
+    ):
+        """
+        Initialize a YAML serializer.
+
+        Parameters
+        ----------
+        indent: int, optional
+            Set the indentation level for YAML keys.
+        """
+        self._indent = indent
+
     def serialize(self, value: Any, writer: BinaryIO):
         """Serialize a value into a YAML object, encoded into binary format using utf-8."""
         import yaml
 
         try:
 
-            yaml.dump(
+            yaml.safe_dump(
                 value,
                 io.TextIOWrapper(writer, encoding="utf-8"),
-                Dumper=yaml.SafeDumper,
+                indent=self._indent,
             )
         except yaml.YAMLError as e:
             raise SerializationError(e)
@@ -30,6 +44,6 @@ class AsYAML:
         import yaml
 
         try:
-            return yaml.load(reader, Loader=yaml.SafeLoader)
+            return yaml.safe_load(reader)
         except yaml.YAMLError as e:
             raise DeserializationError(e)

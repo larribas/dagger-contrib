@@ -12,7 +12,7 @@ def test__conforms_to_protocol():
     assert isinstance(AsYAML(), Serializer)
 
 
-def test_serialize_valid_values():
+def test_serialization_and_deserialization_are_symmetric():
     serializer = AsYAML()
     valid_values = [
         None,
@@ -37,6 +37,27 @@ def test_serialize_valid_values():
                 deserialized_value = serializer.deserialize(reader)
 
             assert value == deserialized_value
+
+
+def test_serialization_indentation():
+    serializer = AsYAML(indent=5)
+
+    with tempfile.TemporaryDirectory() as tmp:
+        filename = os.path.join(tmp, "value.yaml")
+
+        with open(filename, "wb") as writer:
+            serializer.serialize({"c": {"c1": [{"c2": 2}, {"c3": 3}]}}, writer)
+
+        with open(filename, "r") as f:
+            serialized_value = f.read()
+            assert (
+                serialized_value
+                == """c:
+     c1:
+     -    c2: 2
+     -    c3: 3
+"""
+            )
 
 
 def test_serialize_invalid_values():
