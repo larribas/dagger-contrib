@@ -1,0 +1,26 @@
+name: Publish Library
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    env:
+      PYTHON: 3.9.6
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ env.PYTHON }}
+      - uses: Gr1N/setup-poetry@v7
+        with:
+          poetry-version: 1.1.5
+      - name: Set version
+        run: make set-version-from-git
+      - name: Build
+        run: poetry build -vvv
+      - name: Publish
+        run: poetry publish --username __token__ --password ${{ secrets.PYPI_TOKEN }}
+
