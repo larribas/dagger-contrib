@@ -3,7 +3,7 @@ DIRS ?= dagger_contrib/ tests/
 
 .PHONY: install
 install:
-	poetry install
+	poetry install --extras all
 
 .PHONY: test
 test:

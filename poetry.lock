@@ -318,12 +318,13 @@ optional = false
 python-versions = "*"
 
 [extras]
+all = ["PyYAML"]
 yaml = ["PyYAML"]
 
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<4.0"
-content-hash = "d407b57dbee081f9c85480c29764e508860b961e70c3ad3e19fe2604d2041c34"
+content-hash = "b407af74e75464ae1ba298178d3b633f5686c92de0337b2ed4f01795535ff9ee"
 
 [metadata.files]
 appdirs = [

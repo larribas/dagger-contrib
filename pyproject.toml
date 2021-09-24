@@ -30,6 +30,7 @@ PyYAML = { version = "^5.4", optional = true }
 
 [tool.poetry.extras]
 yaml = ["PyYAML"]
+all = ["PyYAML"]
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2"
