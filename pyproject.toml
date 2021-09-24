@@ -27,10 +27,12 @@ classifiers = [
 python = ">=3.8,<4.0"
 py-dagger = "^0.3.0"
 PyYAML = { version = "^5.4", optional = true }
+pandas = { version = "^1.3", optional = true }
 
 [tool.poetry.extras]
 yaml = ["PyYAML"]
-all = ["PyYAML"]
+pandas = ["pandas"]
+all = ["PyYAML", "pandas"]
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2"
@@ -40,6 +42,7 @@ flake8 = "^3.9.2"
 pydocstyle = "^6.1.1"
 mypy = "^0.812"
 pytest-cov = "^2.12.0"
+pyarrow = "^5.0.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
