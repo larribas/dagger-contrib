@@ -81,10 +81,14 @@ def test_serialization_and_deserialization_are_symmetric_for_a_directory():
             # Retrieving a value equivalent to the original one (a directory
             # containing files with the original structure and contents)
             assert deserialized_dir.startswith(output_dir)
-            assert list(os.walk(deserialized_dir)) == [
-                (os.path.join(output_dir, "original_dir"), ["subdir"], ["a"]),
-                (os.path.join(output_dir, "original_dir", "subdir"), [], ["a", "b"]),
-            ]
+            structure = {
+                root: (set(dirs), set(files))
+                for root, dirs, files in os.walk(deserialized_dir)
+            }
+            assert structure == {
+                os.path.join(output_dir, "original_dir"): ({"subdir"}, {"a"}),
+                os.path.join(output_dir, "original_dir", "subdir"): (set(), {"a", "b"}),
+            }
             for filename in original_filenames:
                 with open(os.path.join(deserialized_dir, filename), "r") as f:
                     assert f.read() == filename
