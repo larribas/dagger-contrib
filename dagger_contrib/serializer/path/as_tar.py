@@ -46,15 +46,11 @@ class AsTar:
 
     def serialize(self, value: Any, writer: BinaryIO):
         """Serialize 'value', which is expected to be a path to the local filesystem, as a compressed tar file written to 'writer'."""
-        try:
-            with tarfile.open(
-                fileobj=writer,
-                mode=f"w|{self.MODE_BY_COMPRESSION[self._compression or '']}",
-            ) as tar:
-                tar.add(value, arcname=os.path.basename(value))
-
-        except tarfile.TarError as e:
-            raise SerializationError(e)
+        with tarfile.open(
+            fileobj=writer,
+            mode=f"w|{self.MODE_BY_COMPRESSION[self._compression or '']}",
+        ) as tar:
+            tar.add(value, arcname=os.path.basename(value))
 
     def deserialize(self, reader: BinaryIO) -> Any:
         """Extract a tarfile into the output directory the serializer was initialized with."""

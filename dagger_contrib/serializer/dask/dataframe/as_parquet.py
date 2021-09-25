@@ -65,14 +65,10 @@ class AsParquet:
         from pandas.errors import EmptyDataError
 
         path = self._path_serializer.deserialize(reader)
-
-        try:
-            return read_parquet(
-                path,
-                engine=self._engine,
-            )
-        except EmptyDataError as e:
-            raise DeserializationError(e)
+        return read_parquet(
+            path,
+            engine=self._engine,
+        )
 
     @property
     def extension(self) -> str:

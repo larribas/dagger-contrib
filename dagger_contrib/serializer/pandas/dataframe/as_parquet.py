@@ -56,10 +56,7 @@ class AsParquet:
         """Deserialize a Parquet file into a DataFrame object."""
         import pandas as pd
 
-        try:
-            return pd.read_parquet(reader, engine=self._engine)
-        except pd.errors.EmptyDataError as e:
-            raise DeserializationError(e)
+        return pd.read_parquet(reader, engine=self._engine)
 
     @property
     def extension(self) -> str:

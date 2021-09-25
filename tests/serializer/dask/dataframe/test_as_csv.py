@@ -93,6 +93,32 @@ def test_deserialize_invalid_value():
                 serializer.deserialize(reader)
 
 
+def test_deserialize_compressed_file_without_compression(df_with_multiple_partitions):
+    with tempfile.TemporaryDirectory() as tmp:
+        output_dir = os.path.join(tmp, "tar_output_dir")
+        path_serializer = AsTar(output_dir=output_dir)
+
+        serializer = AsCSV(
+            path_serializer=path_serializer,
+            compression="gzip",
+        )
+
+        filename = os.path.join(tmp, f"file.{serializer.extension}")
+        with open(filename, "wb") as writer:
+            serializer.serialize(df_with_multiple_partitions, writer)
+
+        with open(filename, "rb") as reader:
+            with pytest.raises(DeserializationError) as e:
+                AsCSV(
+                    path_serializer=path_serializer,
+                    compression=None,
+                ).deserialize(reader)
+
+            assert str(e.value).startswith(
+                "We could not deserialize the CSV artifact. This may be happening because the file was originally serialized with a particular compression mode, but you're trying to deserialize it with compression=None. The original error is:"
+            )
+
+
 def test_extension_delegates_to_path_serializer():
     class CustomSerializer:
         extension = "custom.ext"
