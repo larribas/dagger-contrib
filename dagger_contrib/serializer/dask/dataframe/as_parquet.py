@@ -4,7 +4,7 @@ import os
 import tempfile
 from typing import Any, BinaryIO, Optional
 
-from dagger import DeserializationError, SerializationError, Serializer
+from dagger import SerializationError, Serializer
 
 
 class AsParquet:
@@ -62,7 +62,6 @@ class AsParquet:
     def deserialize(self, reader: BinaryIO) -> Any:
         """Deserialize the content of 'reader' into a Dask DataFrame backed by a series of CSV files."""
         from dask.dataframe import read_parquet
-        from pandas.errors import EmptyDataError
 
         path = self._path_serializer.deserialize(reader)
         return read_parquet(

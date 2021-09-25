@@ -4,7 +4,7 @@ import os
 import tarfile
 from typing import Any, BinaryIO, Optional
 
-from dagger import DeserializationError, SerializationError
+from dagger import DeserializationError
 
 
 class AsTar:

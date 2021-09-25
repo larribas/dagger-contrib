@@ -28,7 +28,7 @@ python = ">=3.8,<3.11"
 py-dagger = "^0.3.0"
 PyYAML = { version = "^5.4", optional = true }
 pandas = { version = "^1.3", optional = true }
-dask = { version = "^2021.9.1", extras = ["dataframe"], optional = true }
+dask = { version = "^2021.9", extras = ["dataframe"], optional = true }
 
 [tool.poetry.extras]
 yaml = ["PyYAML"]

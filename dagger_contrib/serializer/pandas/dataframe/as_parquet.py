@@ -2,7 +2,7 @@
 
 from typing import Any, BinaryIO, Optional
 
-from dagger import DeserializationError, SerializationError
+from dagger import SerializationError
 
 
 class AsParquet:
