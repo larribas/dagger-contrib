@@ -24,10 +24,9 @@ def test_serialization_and_deserialization_are_symmetric(star_wars_dataframe):
     ]
 
     with tempfile.TemporaryDirectory() as tmp:
-        filename = os.path.join(tmp, "value.csv")
-
         for compression in compression_modes:
             serializer = AsCSV(compression=compression)
+            filename = os.path.join(tmp, f"file.{serializer.extension}")
 
             with open(filename, "wb") as writer:
                 serializer.serialize(star_wars_dataframe, writer)
@@ -72,7 +71,7 @@ def test_deserialize_uncompressed_file_with_compression():
 
 def test_deserialize_compressed_file_without_compression(star_wars_dataframe):
     with tempfile.TemporaryDirectory() as tmp:
-        filename = os.path.join(tmp, "value.csv")
+        filename = os.path.join(tmp, "value.csv.gz")
 
         with open(filename, "wb") as writer:
             AsCSV(compression="gzip").serialize(star_wars_dataframe, writer)
@@ -84,3 +83,18 @@ def test_deserialize_compressed_file_without_compression(star_wars_dataframe):
             assert str(e.value).startswith(
                 "We could not deserialize the CSV artifact. This may be happening because the file was originally serialized with a particular compression mode, but you're trying to deserialize it with compression=None. The original error is:"
             )
+
+
+def test_extension_depends_on_compression():
+    cases = [
+        (None, "csv"),
+        ("gzip", "csv.gz"),
+        ("zip", "csv.zip"),
+        ("xz", "csv.xz"),
+        ("bz2", "csv.bz2"),
+        ("infer", "csv"),
+        ("something_else", "csv"),
+    ]
+
+    for compression, expected_extension in cases:
+        assert AsCSV(compression=compression).extension == expected_extension
