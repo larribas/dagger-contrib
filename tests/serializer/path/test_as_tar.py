@@ -3,7 +3,7 @@ import os
 import tempfile
 
 import pytest
-from dagger import DeserializationError, SerializationError, Serializer
+from dagger import DeserializationError, Serializer
 
 from dagger_contrib.serializer.path.as_tar import AsTar
 

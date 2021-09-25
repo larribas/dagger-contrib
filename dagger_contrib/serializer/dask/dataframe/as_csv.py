@@ -32,7 +32,7 @@ class AsCSV:
     def __init__(
         self,
         path_serializer: Serializer,
-        csv_compression: Optional[str] = None,
+        compression: Optional[str] = None,
     ):
         """
         Initialize a serializer that serializes DataFrame values as CSVs.
@@ -43,10 +43,10 @@ class AsCSV:
             A Serializer implementation that works with path names pointing to a file or a directory in the local filesystem.
             Any serializer in dagger_contrib.path.* should be compatible (e.g. AsTar)
 
-        csv_compression: str, optional
+        compression: str, optional
             The compression mode to use for each CSV file, which may be one of the following values: {"gzip", "bz2", "xz", None}
         """
-        self._csv_compression = csv_compression
+        self._compression = compression
         self._path_serializer = path_serializer
 
     def serialize(self, value: Any, writer: BinaryIO):
@@ -61,7 +61,7 @@ class AsCSV:
         with tempfile.TemporaryDirectory() as tmp:
             value.to_csv(
                 os.path.join(tmp, self.GLOB_PATTERN),
-                compression=self._csv_compression,
+                compression=self._compression,
             )
             self._path_serializer.serialize(tmp, writer)
 
@@ -75,9 +75,9 @@ class AsCSV:
         try:
             return read_csv(
                 os.path.join(path, self.GLOB_PATTERN),
-                compression=self._csv_compression,
+                compression=self._compression,
                 blocksize=self.BLOCKSIZE_BY_COMPRESSION.get(
-                    self._csv_compression or "", "default"
+                    self._compression or "", "default"
                 ),
             ).set_index("Unnamed: 0")
         except EmptyDataError as e:

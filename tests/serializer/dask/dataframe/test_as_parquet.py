@@ -5,21 +5,21 @@ import tempfile
 import pytest
 from dagger import DeserializationError, SerializationError, Serializer
 
-from dagger_contrib.serializer.dask.dataframe.as_csv import AsCSV
+from dagger_contrib.serializer.dask.dataframe.as_parquet import AsParquet
 from dagger_contrib.serializer.path.as_tar import AsTar
 
 
 def test__conforms_to_protocol():
     with tempfile.TemporaryDirectory() as tmp:
-        assert isinstance(AsCSV(path_serializer=AsTar(output_dir=tmp)), Serializer)
+        assert isinstance(AsParquet(path_serializer=AsTar(output_dir=tmp)), Serializer)
 
 
 def test_serialization_and_deserialization_are_symmetric(df_with_multiple_partitions):
     compression_modes = [
         None,
+        "snappy",
         "gzip",
-        "xz",
-        "bz2",
+        "brotli",
     ]
 
     for compression in compression_modes:
@@ -27,7 +27,7 @@ def test_serialization_and_deserialization_are_symmetric(df_with_multiple_partit
             output_dir = os.path.join(tmp, "tar_output_dir")
             path_serializer = AsTar(output_dir=output_dir)
 
-            serializer = AsCSV(
+            serializer = AsParquet(
                 path_serializer=path_serializer,
                 compression=compression,
             )
@@ -59,7 +59,7 @@ def test_serialize_invalid_values():
         with tempfile.TemporaryDirectory() as tmp:
             output_dir = os.path.join(tmp, "tar_output_dir")
             path_serializer = AsTar(output_dir=output_dir)
-            serializer = AsCSV(path_serializer=path_serializer)
+            serializer = AsParquet(path_serializer=path_serializer)
 
             with pytest.raises(SerializationError) as e:
                 serializer.serialize(value, io.BytesIO())
@@ -73,10 +73,9 @@ def test_serialize_invalid_values():
 def test_deserialize_invalid_value():
     with tempfile.TemporaryDirectory() as tmp:
         # The original content, backed by the file system
-        csv_dir = os.path.join(tmp, "csv")
-        os.mkdir(csv_dir)
-        with open(os.path.join(csv_dir, "df-0.csv"), "w") as f:
-            f.write("")  # Empty
+        parquet_file = os.path.join(tmp, "my.parquet")
+        with open(parquet_file, "w") as f:
+            f.write("not a parquet file")
 
         # The serializer produces a tar file
         output_dir = os.path.join(tmp, "output_dir")
@@ -84,12 +83,12 @@ def test_deserialize_invalid_value():
         path_serializer = AsTar(output_dir=output_dir)
         serialized_tar = os.path.join(tmp, "serialized_tar.tar")
         with open(serialized_tar, "wb") as writer:
-            path_serializer.serialize(csv_dir, writer)
+            path_serializer.serialize(parquet_file, writer)
 
         # We try to read it using the CSV serializer
-        serializer = AsCSV(path_serializer=path_serializer)
+        serializer = AsParquet(path_serializer=path_serializer)
         with open(serialized_tar, "rb") as reader:
-            with pytest.raises(DeserializationError):
+            with pytest.raises(Exception):
                 serializer.deserialize(reader)
 
 
@@ -103,5 +102,5 @@ def test_extension_delegates_to_path_serializer():
         def deserialize(self, reader):
             pass
 
-    serializer = AsCSV(path_serializer=CustomSerializer())
+    serializer = AsParquet(path_serializer=CustomSerializer())
     assert serializer.extension == "custom.ext"
