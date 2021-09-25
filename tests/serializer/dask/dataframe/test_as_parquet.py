@@ -3,7 +3,7 @@ import os
 import tempfile
 
 import pytest
-from dagger import DeserializationError, SerializationError, Serializer
+from dagger import SerializationError, Serializer
 
 from dagger_contrib.serializer.dask.dataframe.as_parquet import AsParquet
 from dagger_contrib.serializer.path.as_tar import AsTar
