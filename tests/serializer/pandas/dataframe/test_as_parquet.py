@@ -5,7 +5,7 @@ import tempfile
 import pytest
 from dagger import SerializationError, Serializer
 
-from dagger_contrib.serializer.pandas.as_parquet import AsParquet
+from dagger_contrib.serializer.pandas.dataframe.as_parquet import AsParquet
 
 
 def test__conforms_to_protocol():
@@ -21,10 +21,9 @@ def test_serialization_and_deserialization_are_symmetric(star_wars_dataframe):
     ]
 
     with tempfile.TemporaryDirectory() as tmp:
-        filename = os.path.join(tmp, "value.parquet")
-
         for compression in compression_modes:
             serializer = AsParquet(compression=compression)
+            filename = os.path.join(tmp, f"file.{serializer.extension}")
 
             with open(filename, "wb") as writer:
                 serializer.serialize(star_wars_dataframe, writer)
@@ -51,7 +50,7 @@ def test_serialize_invalid_values():
 
             assert (
                 str(e.value)
-                == f"The pandas.AsParquet serializer only works with values of type pd.DataFrame. You are trying to serialize a value of type '{type(value).__name__}'"
+                == f"This serializer only works with values of type pd.DataFrame. You are trying to serialize a value of type '{type(value).__name__}'"
             )
 
 
@@ -59,3 +58,16 @@ def test_deserialize_empty_file():
     serializer = AsParquet()
     with pytest.raises(Exception):
         serializer.deserialize(io.BytesIO(b""))
+
+
+def test_extension_depends_on_compression():
+    cases = [
+        (None, "parquet"),
+        ("gzip", "parquet.gz"),
+        ("snappy", "parquet.snappy"),
+        ("brotli", "parquet.br"),
+        ("something_else", "parquet"),
+    ]
+
+    for compression, expected_extension in cases:
+        assert AsParquet(compression=compression).extension == expected_extension
