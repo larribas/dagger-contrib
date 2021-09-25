@@ -47,7 +47,7 @@ class AsParquet:
 
         if not isinstance(value, pd.DataFrame):
             raise SerializationError(
-                f"The pandas.AsParquet serializer only works with values of type pd.DataFrame. You are trying to serialize a value of type '{type(value).__name__}'"
+                f"This serializer only works with values of type pd.DataFrame. You are trying to serialize a value of type '{type(value).__name__}'"
             )
 
         value.to_parquet(writer, engine=self._engine, compression=self._compression)

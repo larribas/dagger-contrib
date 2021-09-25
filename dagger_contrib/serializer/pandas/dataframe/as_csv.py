@@ -38,22 +38,23 @@ class AsCSV:
 
     def serialize(self, value: Any, writer: BinaryIO):
         """Serialize a Pandas DataFrame as a CSV file."""
-        import pandas as pd
+        from pandas import DataFrame
 
-        if not isinstance(value, pd.DataFrame):
+        if not isinstance(value, DataFrame):
             raise SerializationError(
-                f"The pandas.AsCSV serializer only works with values of type pd.DataFrame. You are trying to serialize a value of type '{type(value).__name__}'"
+                f"This serializer only works with values of type pd.DataFrame. You are trying to serialize a value of type '{type(value).__name__}'"
             )
 
         value.to_csv(writer, compression=self._compression)
 
     def deserialize(self, reader: BinaryIO) -> Any:
         """Deserialize a CSV into a DataFrame object."""
-        import pandas as pd
+        from pandas import read_csv
+        from pandas.errors import EmptyDataError
 
         try:
-            return pd.read_csv(reader, index_col=0, compression=self._compression)
-        except pd.errors.EmptyDataError as e:
+            return read_csv(reader, index_col=0, compression=self._compression)
+        except EmptyDataError as e:
             raise DeserializationError(e)
         except UnicodeDecodeError as e:
             raise DeserializationError(

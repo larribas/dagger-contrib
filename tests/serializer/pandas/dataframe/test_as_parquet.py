@@ -5,7 +5,7 @@ import tempfile
 import pytest
 from dagger import SerializationError, Serializer
 
-from dagger_contrib.serializer.pandas.as_parquet import AsParquet
+from dagger_contrib.serializer.pandas.dataframe.as_parquet import AsParquet
 
 
 def test__conforms_to_protocol():
@@ -50,7 +50,7 @@ def test_serialize_invalid_values():
 
             assert (
                 str(e.value)
-                == f"The pandas.AsParquet serializer only works with values of type pd.DataFrame. You are trying to serialize a value of type '{type(value).__name__}'"
+                == f"This serializer only works with values of type pd.DataFrame. You are trying to serialize a value of type '{type(value).__name__}'"
             )
 
 

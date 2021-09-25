@@ -6,7 +6,7 @@ import tempfile
 import pytest
 from dagger import DeserializationError, SerializationError, Serializer
 
-from dagger_contrib.serializer.pandas.as_csv import AsCSV
+from dagger_contrib.serializer.pandas.dataframe.as_csv import AsCSV
 
 
 def test__conforms_to_protocol():
@@ -53,7 +53,7 @@ def test_serialize_invalid_values():
 
             assert (
                 str(e.value)
-                == f"The pandas.AsCSV serializer only works with values of type pd.DataFrame. You are trying to serialize a value of type '{type(value).__name__}'"
+                == f"This serializer only works with values of type pd.DataFrame. You are trying to serialize a value of type '{type(value).__name__}'"
             )
 
 
