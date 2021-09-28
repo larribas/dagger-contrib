@@ -299,7 +299,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [[package]]
 name = "py-dagger"
-version = "0.3.0"
+version = "0.4.0"
 description = "Define sophisticated data pipelines with Python and run them on different distributed systems (such as Argo Workflows)."
 category = "main"
 optional = false
@@ -483,7 +483,7 @@ yaml = ["PyYAML"]
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<3.11"
-content-hash = "e2cefb01adcbbb7fdbdd98e75eb8158cc023b4d31999d0f99bf1f5d3466e8541"
+content-hash = "3cf905b47bf416fc396badd2893fc7189424f5dde244c6d930d69ef25295c041"
 
 [metadata.files]
 appdirs = [
@@ -699,8 +699,8 @@ py = [
     {file = "py-1.10.0.tar.gz", hash = "sha256:21b81bda15b66ef5e1a777a21c4dcd9c20ad3efd0b3f817e7a809035269e1bd3"},
 ]
 py-dagger = [
-    {file = "py-dagger-0.3.0.tar.gz", hash = "sha256:6e343b7c2a9de86dbf48306de0b329ee6c37ab990299cded2a99bc92c0b649d3"},
-    {file = "py_dagger-0.3.0-py3-none-any.whl", hash = "sha256:096934b6cdd7eb3d963c96e66a21d2f626c8f0f6746b0202a6dd4b0a879e47ae"},
+    {file = "py-dagger-0.4.0.tar.gz", hash = "sha256:35bc9a5dca1ba50989d27586d4f90a76667d902d6df9030acf5b0935ce9a7414"},
+    {file = "py_dagger-0.4.0-py3-none-any.whl", hash = "sha256:ffa5aa97abecac5db33f2d33979b3460a5e9781e1137015d54706ca663cd60c3"},
 ]
 pyarrow = [
     {file = "pyarrow-5.0.0-cp36-cp36m-macosx_10_13_x86_64.whl", hash = "sha256:e9ec80f4a77057498cf4c5965389e42e7f6a618b6859e6dd615e57505c9167a6"},
