@@ -17,6 +17,7 @@ This repository contains extensions and experiments using the [`py-dagger` libra
     * `AsYAML` - Serializes primitive data types using [YAML](https://yaml.org/spec/).
     * `path` - Serializes local files or directories given their path name.
         - `AsTar` - As tarfiles with optional compression.
+        - `AsZip` - As zip files with optional compression.
     * `pandas.dataframe` - Serializes [Pandas DataFrames](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html).
         - `AsCSV` - As CSV files.
         - `AsParquet` - As Parquet files.

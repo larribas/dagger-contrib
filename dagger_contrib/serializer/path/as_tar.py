@@ -35,9 +35,6 @@ class AsTar:
         compression: str, optional, default="gzip"
             The compression algorithm to use. When None, the file will be uncompressed.
             Accepted values are {"gzip", "bz2", "xz", None}.
-
-        bufsize: int
-
         """
         assert compression is None or compression in ["gzip", "bz2", "xz"]
 
