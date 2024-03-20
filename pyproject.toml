@@ -38,7 +38,7 @@ all = ["PyYAML", "pandas", "dask"]
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2"
-black = "^20.8b1"
+black = "^24.3"
 isort = "^5.7.0"
 flake8 = "^3.9.2"
 pydocstyle = "^6.1.1"
